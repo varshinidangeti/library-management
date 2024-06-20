@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-Up</title>
+</head>
+<body>
+    <h1>Sign-Up Page</h1>
+    <form id="signupForm">
+        <label for="email">Email:</label>
+        <input type="email" id="emailInput" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="passwordInput" required>
+        <br>
+        <label for="passwordconfirm">Confirm Password:</label>
+        <input type="password" id="passwordInputConfirm" required>
+        <br>
+        <a href="index.html">Sign-in</a>
+        <button type="submit">Sign-Up</button>
+    </form>
+    
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+            
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const passwordConfirm = document.getElementById('passwordInputConfirm').value;
+
+            if (password !== passwordConfirm) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert('Sign up successful: ' + data.message);
+                } else {
+                    const errorData = await response.json();
+                    alert('Error: ' + errorData.message);
+                }
+            } catch (error) {
+                console.log(error);
+                alert('Error: Unable to connect to the server');
+            }
+        });
+    </script>
+</body>
+</html>

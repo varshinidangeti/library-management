@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RETURN BOOK</title>
+</head>
+<body>
+    <center>
+        <h1>RETURN BOOK</h1>
+        <form id="returnbookForm">
+            <label for="name">BOOK NAME:</label>
+            <input type="text" id="name" placeholder="Enter the book name here" required><br>
+            
+            <button type="submit">Return Book</button>
+        </form>
+    </center>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('returnbookForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const name = document.getElementById('name').value;
+                
+
+                try {
+                    const response = await fetch('http://localhost:3000/returnbook', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name }),
+                    });
+                    const result = await response.text();
+                    console.log('Response:', result);
+
+                    if (response.ok) {
+                        alert('Book returned successfully!');
+                    } else {
+                        alert(result || 'Error returning book!');
+                    }
+                } catch (error) {
+                    console.error('Error during book return:', error);
+                    alert('Error returning book!');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
